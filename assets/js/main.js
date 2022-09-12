@@ -149,11 +149,5 @@ const module = {
     };
     return btn;
   },
-  bt: function () {
-    console.log("a");
-  },
-  bt1: function () {
-    console.log("delete");
-  },
 };
 module.init();
