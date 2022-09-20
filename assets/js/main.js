@@ -30,13 +30,11 @@ const module = {
     const exist = this.productos.some((prod) => prod.id === id);
 
     if (exist !== true && id !== "") {
-      console.log("lol");
       this.add(item);
     }
   },
   add: function (newproductos) {
     this.productos.push(newproductos);
-    console.log(newproductos);
     this.paint(this.productos);
     this.clean();
   },
@@ -58,8 +56,6 @@ const module = {
     const id = this.idInput.value;
     const productos = this.productoInput.value;
     const item = { id, productos };
-    //const index= this.productos.findIndex(producto => producto.id === item.id);
-    console.log(index);
     if (index > -1) {
       this.productos.splice(index, 1);
     }
@@ -103,8 +99,8 @@ const module = {
       tr.appendChild(td);
 
       td = document.createElement("td");
-      td.appendChild(this.creteButton("edit"));
-      td.appendChild(this.creteButton("delete"));
+      td.appendChild(this.creteButton("edit","fa fa-pencil","btn btn-warning me-2"));
+      td.appendChild(this.creteButton("delete", "fa fa-trash", "btn btn-danger me-2"));
       tr.appendChild(td);
 
       tbody.appendChild(tr);
@@ -115,38 +111,34 @@ const module = {
     this.idInput.value = "";
     this.productoInput.value = "";
   },
-  creteButton: function (id) {
-    let id_ = this.idInput.value;
-    let prod_ = this.productoInput.value;
-    const btn = document.createElement("button");   
-    const i= document.createElement("i");
+  creteButton: function (id, iTxt, btnTxt) {
+    const btn = document.createElement("button");
+    const i = document.createElement("i");
+    i.className = iTxt;
     btn.appendChild(i);
-    if (id === "edit") {
-        btn.className = "btn btn-warning me-2";      
- 
-      btn.addEventListener("click", (Event) => {
-        const tbl = document.getElementById("tbody");
-        const index = Event.target.parentNode.parentNode.sectionRowIndex;
-        console.log(Event.target.parentNode.parentNode.sectionRowIndex);      
-        
-        this.idInput.value = tbl.rows[index].cells[0].innerHTML;
-        this.productoInput.value = tbl.rows[index].cells[1].innerHTML;
-        
-        
-      });
-      i.className="fa fa-pencil"
-    };
-            
-    if (id === "delete") {
-        
-      btn.addEventListener("click", (Event) => {
-        const index1 = Event.target.parentNode.parentNode.sectionRowIndex;
-        console.log(index1);
-        this.delete(index1);
-      });
-      btn.className = "btn btn-danger";
-      i.className="fa fa-trash"
-    };
+    btn.className = btnTxt;
+    
+
+    btn.addEventListener("click", (Event) => {
+      select = btn.closest('tr').cells[0].textContent
+      if (id === "edit") {        
+        this.productos.forEach((p) => {
+          if (p.id === select) {
+            this.idInput.value = p.id;
+            this.productoInput.value = p.prod_;
+          }
+        })
+      };
+      if (id === "delete") {
+        let index=btn.closest('tr').rowIndex -1;
+        this.productos.forEach((p) => {
+          if (p.id === select) {            
+          this.delete(index);
+          }
+        })
+      };
+    });
+
     return btn;
   },
 };
